@@ -85,7 +85,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // User Schema
 const userSchema = new mongoose.Schema({
-    emaildb: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     resetKey: { type: String },
     resetExpires: { type: Date },
@@ -151,7 +151,7 @@ app.post('/index', loginLimiter, async (req, res) => {
         if (!email || !password) return res.status(400).json({ success: false, message: 'Email and password are required.' });
         if (!validator.isEmail(email)) return res.status(400).json({ success: false, message: 'Invalid email format.' });
 
-        const user = await usersCollection.findOne({ emaildb: email });
+        const user = await usersCollection.findOne({ email: email });
         if (!user) return res.status(400).json({ success: false, message: 'Invalid email or password.' });
 
         if (user.accountLockedUntil && user.accountLockedUntil > new Date()) {
@@ -181,7 +181,7 @@ app.post('/index', loginLimiter, async (req, res) => {
         );
 
         req.session.userId = user._id;
-        req.session.email = user.emaildb;
+        req.session.email = user.email;
         req.session.role = user.role;
         req.session.studentIDNumber = user.studentIDNumber;
 
@@ -208,11 +208,11 @@ app.post('/signup', async (req, res) => {
             return res.status(400).json({ success: false, message: 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.' });
         }
 
-        const existingUser = await usersCollection.findOne({ emaildb: email });
+        const existingUser = await usersCollection.findOne({ email: email });
         if (existingUser) return res.status(400).json({ success: false, message: 'Email already registered.' });
 
         const hashedPassword = hashPassword(password);
-        await usersCollection.insertOne({ emaildb: email, password: hashedPassword });
+        await usersCollection.insertOne({ email: email, password: hashedPassword });
         
         res.json({ success: true, message: 'Account created successfully!' });
     } catch (error) {
@@ -276,7 +276,7 @@ app.post('/forgot-password', async (req, res) => {
 app.post('/send-password-reset', async (req, res) => {
     const { email } = req.body;
     try {
-        const user = await User.findOne({ emaildb: email });
+        const user = await User.findOne({ email: email });
         if (!user) {
             return res.status(404).json({ message: 'No account with that email exists' });
         }
