@@ -15,6 +15,9 @@ const PORT = process.env.PORT || 3000;
 const mongoUri = process.env.MONGODB_URI;
 sgMail.setApiKey(process.env.SENDGRID_API_KEY); // Set SendGrid API key
 
+// Trust the proxy (if you're behind a load balancer or proxy)
+app.set('trust proxy', 1);
+
 // Session management with MongoDB store
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -112,7 +115,6 @@ function generateCode() {
 }
 
 // Send Reset Code Email using SendGrid
-
 async function sendResetCodeEmail(email, resetCode) {
     const msg = {
         from: 'edorianpuru@gmail.com',  // Ensure this is verified in SendGrid
@@ -124,7 +126,6 @@ async function sendResetCodeEmail(email, resetCode) {
 
     try {
         await sgMail.send(msg);
-        console.log('SendGrid Response:', response);
         console.log(`Reset code email sent to ${email}`);
     } catch (error) {
         console.error('Error sending reset code email:', error.response ? error.response.body : error.message);
