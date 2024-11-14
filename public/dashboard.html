@@ -188,13 +188,9 @@
             <a href="#about">About</a>
             <a href="#services">Services</a>
             <a href="#contact">Contact</a>
-            <a href="index.html">Log-Out</Log-out></a>
+            <a href="#" onclick="logout()">Log-Out</a>
         </nav>
         <div class="nav-btn">Join Us</div>
-        <div>
-        <button id="logoutButton">Logout</button>
-        <p id="logoutMessage" class="alert" style="display: none;"></p>
-        </div>
     </header>
     
     <section class="home" id="home">
@@ -243,39 +239,29 @@
         }
         }
         </script>
-        <script>
-            document.getElementById('logoutButton').addEventListener('click', async () => {
-                const logoutMessage = document.getElementById('logoutMessage');
-                logoutMessage.style.display = 'none'; // Hide the message initially
-            
-                try {
-                    const response = await fetch('/logout', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        credentials: 'include', // Include cookies for session handling
-                    });
-            
-                    const data = await response.json();
-                    
-                    // Display logout message
-                    logoutMessage.innerText = data.message;
-                    logoutMessage.style.display = 'block';
-            
+          <script>
+            function logout() {
+                fetch('/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'same-origin' // Ensure session cookies are sent with the request
+                })
+                .then(response => response.json())
+                .then(data => {
                     if (data.success) {
-                        // Redirect to index.html after successful logout
-                        setTimeout(() => {
-                            window.location.href = 'index.html';
-                        }, 1000); // 1 second delay before redirecting
+                        alert(data.message);  // Display the logout success message
+                        window.location.href = 'index.html'; // Redirect to the login page or home page
+                    } else {
+                        alert(data.message);  // Display the error message
                     }
-                } catch (error) {
-                    console.error('Error during logout:', error);
-                    logoutMessage.innerText = 'Logout failed. Please try again.';
-                    logoutMessage.style.display = 'block';
-                }
-            });
-            </script>
-            
+                })
+                .catch(error => {
+                    console.error('Logout failed:', error);
+                    alert('Logout failed. Please try again.');
+                });
+            }
+        </script>
 </body>
 </html>

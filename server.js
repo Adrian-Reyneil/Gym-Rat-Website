@@ -375,23 +375,25 @@ app.get('/user-details', isAuthenticated, async (req, res) => {
 });
 
 app.post('/logout', async (req, res) => {
-        if (!req.session.userId) {
-            return res.status(400).json({ success: false, message: 'No user is logged in.' });
-        }
-        try {
-            req.session.destroy(err => {
-        if (err) {
-            console.error('Error destroying session:', err);
-            return res.status(500).json({ success: false, message: 'Logout failed.' });
-        }
-        res.clearCookie('connect.sid');
-       });
-        res.json({ success: true, message: 'Logged out successfully.' });
-        } catch (error) {
-            console.error('Error during logout:', error);
-            res.status(500).json({ success: false, message: 'Logout failed.' });
-        }
+    if (!req.session.userId) {
+        return res.status(400).json({ success: false, message: 'No user is logged in.' });
+    }
+    try {
+        req.session.destroy(err => {
+            if (err) {
+                console.error('Error destroying session:', err);
+                return res.status(500).json({ success: false, message: 'Logout failed.' });
+            }
+            res.clearCookie('connect.sid');
+            res.json({ success: true, message: 'Logged out successfully.' }); // Send response only once
+        });
+    } catch (error) {
+        console.error('Error during logout:', error);
+        res.status(500).json({ success: false, message: 'Logout failed.' });
+    }
 });
+
+
 // Start the Server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
