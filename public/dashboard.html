@@ -175,6 +175,16 @@
             border-radius: 10px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
         }
+        .alert {
+            padding: 10px;
+            background-color: #f44336; /* Red background for error */
+            color: white;
+            margin-top: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+
         
     </style>
     
@@ -188,7 +198,9 @@
             <a href="#about">About</a>
             <a href="#services">Services</a>
             <a href="#contact">Contact</a>
-            <a href="index.html">Log-Out</Log-out></a>
+            <button id="logoutButton">Logout</button>
+            <p id="logoutMessage" class="alert" style="display: none;"></p>
+            
         </nav>
         <div class="nav-btn">Join Us</div>
     </header>
@@ -239,5 +251,37 @@
         }
         }
         </script>
+        <script>
+            document.getElementById('logoutButton').addEventListener('click', async () => {
+                const logoutMessage = document.getElementById('logoutMessage');
+                logoutMessage.style.display = 'none'; // Hide the message initially
+            
+                try {
+                    const response = await fetch('/logout', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'include',
+                    });
+            
+                    const data = await response.json();
+                    logoutMessage.innerText = data.message;
+                    logoutMessage.style.display = 'block'; // Show the message
+            
+                    if (data.success) {
+                        // Optional: Redirect after a short delay
+                        setTimeout(() => {
+                            window.location.href = '/index';
+                        }, 1500); // 1.5 second delay before redirecting
+                    }
+                } catch (error) {
+                    console.error('Error during logout:', error);
+                    logoutMessage.innerText = 'Logout failed. Please try again.';
+                    logoutMessage.style.display = 'block'; // Show the message
+                }
+            });
+            </script>
+            
 </body>
 </html>
