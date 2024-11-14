@@ -203,17 +203,10 @@ app.post('/send-password-reset', async (req, res) => {
 // Reset Password Endpoint
 app.post('/reset-password', async (req, res) => {
     const { resetKey, newPassword } = req.body;
-    const { email, password } = req.body;
+    const { password } = req.body;
 
-    if (!email || !password) {
-        return res.status(400).json({ success: false, message: 'Full name, email, and password are required.' });
-    }
 
-    if (!validator.isEmail(email)) {
-        return res.status(400).json({ success: false, message: 'Invalid email format.' });
-    }
-
-    if (!isValidPassword(password)) {
+    if (!isValidPassword(newpassword)) {
         return res.status(400).json({ success: false, message: 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.' });
     }
 
