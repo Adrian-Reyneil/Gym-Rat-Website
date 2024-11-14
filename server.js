@@ -203,11 +203,13 @@ app.post('/send-password-reset', async (req, res) => {
 // Reset Password Endpoint
 app.post('/reset-password', async (req, res) => {
     const { resetKey, newPassword } = req.body;
-    const { password } = req.body;
 
-
-    if (!isValidPassword(newpassword)) {
-        return res.status(400).json({ success: false, message: 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.' });
+    // Check if the new password is valid
+    if (!isValidPassword(newPassword)) {
+        return res.status(400).json({ 
+            success: false, 
+            message: 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.' 
+        });
     }
 
     try {
@@ -216,6 +218,7 @@ app.post('/reset-password', async (req, res) => {
             resetKey: resetKey,
             resetExpires: { $gt: new Date() } // Ensure resetExpires is in the future
         });
+
         if (!user) {
             return res.status(400).json({ success: false, message: 'Invalid or expired reset key.' });
         }
@@ -223,8 +226,8 @@ app.post('/reset-password', async (req, res) => {
         // Hash the new password
         const hashedPassword = hashPassword(newPassword);
         user.password = hashedPassword;
-        user.resetKey = null;
-        user.resetExpires = null;
+        user.resetKey = null;  // Clear the reset key once password is reset
+        user.resetExpires = null;  // Clear the reset expiration
 
         await user.save();
         res.json({ success: true, message: 'Your password has been successfully reset.' });
@@ -233,6 +236,7 @@ app.post('/reset-password', async (req, res) => {
         res.status(500).json({ success: false, message: 'Error resetting password' });
     }
 });
+
 // Sign Up Route
 app.post('/signup', async (req, res) => {
     const { email, password, firstname, lastname, middleInitial } = req.body;
