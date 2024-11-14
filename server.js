@@ -58,9 +58,14 @@ function hashPassword(password) {
 }
 
 function isValidPassword(password) {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/~`-]).{8,}$/;
-    return passwordRegex.test(password);
+    const minLength = 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+
+    return password.length >= minLength && hasUppercase && hasLowercase && hasNumber;
 }
+
 // Rate limiting for login route
 const loginLimiter = rateLimit({
     windowMs: 30 * 60 * 1000,
@@ -202,14 +207,6 @@ app.post('/send-password-reset', async (req, res) => {
 // Reset Password Endpoint
 app.post('/reset-password', async (req, res) => {
     const { resetKey, newPassword } = req.body;
-
-    // Check if the new password is valid
-    if (!isValidPassword(newPassword)) {
-        return res.status(400).json({ 
-            success: false, 
-            message: 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.' 
-        });
-    }
 
     try {
         // Find user by resetKey and check if it hasn't expired
