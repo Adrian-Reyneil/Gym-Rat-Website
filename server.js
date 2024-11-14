@@ -58,10 +58,9 @@ function hashPassword(password) {
 }
 
 function isValidPassword(password) {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`!])[A-Za-z\d@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`!]{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/~`-]).{8,}$/;
     return passwordRegex.test(password);
 }
-
 // Rate limiting for login route
 const loginLimiter = rateLimit({
     windowMs: 30 * 60 * 1000,
