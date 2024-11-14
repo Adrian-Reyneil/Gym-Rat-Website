@@ -97,6 +97,7 @@
             box-shadow: 0 8px 16px rgba(15, 15, 15, 0.8);
             border-radius: 10px;
             padding: 2.1rem 3%;
+            background: rgba(0, 0, 0, 0.5);
         }
     
         .home-content h2 {
@@ -131,10 +132,22 @@
             box-shadow: 0 0 8px var(--main-color);
         }
     
-        .home-img img {
-            width: 50vw;
+        .home-img {
+            width: 100%;
+            max-width: 560px; 
+            position: relative;
+        }
+
+        .home-img iframe {
             border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 10px rgba(255, 123, 0, 0.774);
+        }
+        .responsive-video {
+            width: 100%;          /* Adjusts to the width of its container */
+            height: auto;         /* Keeps the aspect ratio */
+            max-width: 450px;     /* Maximum width to control size */
+            aspect-ratio: 1;      /* Ensures 1:1 aspect ratio */
+            margin-left: 100px;
         }
     
         /* Responsive Adjustments */
@@ -175,7 +188,7 @@
             <a href="#about">About</a>
             <a href="#services">Services</a>
             <a href="#contact">Contact</a>
-            <a href="index.html">Log Out</a>
+            <a href="index.html">Log-Out</Log-out></a>
         </nav>
         <div class="nav-btn">Join Us</div>
     </header>
@@ -189,7 +202,16 @@
             <a href="getStarted.html" class="btn">Get Started</a>
         </div>
         <div class="home-img">
-            <img src="backgdash.png" alt="Fitness Image">
+            <iframe
+                class="responsive-video"
+                width="270"
+                height="480"
+                src="https://www.youtube.com/embed/cct2ufk1VIM"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+            ></iframe>
         </div>
     </section>
 

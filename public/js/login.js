@@ -10,11 +10,14 @@ document.addEventListener("DOMContentLoaded", function() {
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
         
-        // Toggle the icon between '👁' and '🙈'
-        this.textContent = type === 'password' ? '👁' : '🙈';
-        
-        // Optionally change color when password is visible
-        this.style.color = type === 'password' ? '#ff7b00' : '#e67e00'; // Darker orange when password is visible
+       
+        this.textContent = type === 'password' ? '👁' : '👁';
+        // Change the icon color based on the password visibility
+       if (type === 'password') {
+        this.style.color = '#ff7b00'; // Orange color for hidden password
+    } else {
+        this.style.color = 'black'; // Black color for visible password
+    }
     });
 });
 

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Routines</title>
-    <link rel="stylesheet" href="css/style.css"> <!-- Linking to the same CSS file -->
     <style>
+        /* Basic Reset */
         * {
             margin: 0;
             padding: 0;
@@ -16,25 +16,28 @@
         /* Color Variables */
         :root {
             --bg-color: #000000;
-            --second-bg-color: rgba(17, 17, 17, 0.8);
+            --second-bg-color: rgba(17, 17, 17, 0.85);
             --text-color: #ffffff;
             --main-color: #ff7b00;
             --highlight-color: #FFD700;
         }
 
-        /* Body & Basic Styling */
+        /* Body Styling */
         body {
             background-image: url("BGdashboard.jpg");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             color: var(--text-color);
-            font-size: 1.4rem;
-            overflow-x: hidden;
-            position: relative;
+            font-size: 1rem;
+            overflow: hidden; /* Prevent scrolling */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
-        /* Overlay for readability */
+        /* Overlay */
         .overlay {
             position: absolute;
             top: 0;
@@ -45,159 +48,162 @@
             z-index: 1;
         }
 
-        /* Home Section with Flex Layout */
-        .home {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 10rem 8% 2rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Flex container for workout details and image */
-        .home-content {
-            display: flex;
-            max-width: 850px;
-            padding: 2rem;
-            border-radius: 1.2rem;
-            background-color: var(--second-bg-color);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        .workout-details {
-            flex: 1;
-            padding-right: 2rem;
-        }
-
-        .workout-image {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .workout-image img {
-            max-width: 90%;
-            height: 28rem;
-            border-radius: 1rem;
-            box-shadow: 0 0 10px rgba(255, 123, 0, 0.5);
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        /* Routine List */
-        #leg-routine {
-            margin-top: 1rem;
-            list-style: none;
-        }
-
-        #leg-routine li {
-            font-size: 1.6rem;
-            margin-bottom: 1.2rem;
-            display: flex;
-            align-items: center;
-        }
-
-        #leg-routine li::before {
-            content: "💪";
-            margin-right: 1rem;
-            color: var(--main-color);
-        }
-
-        /* Headings */
-        h2 {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--highlight-color);
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-        }
-
-        p {
-            font-size: 1.6rem;
-            margin-bottom: 1.5rem;
-            color: var(--text-color);
-            opacity: 0.9;
-        }
-
-        /* Button Styles */
-        .btn-container {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .btn, .back-btn {
-            padding: 0.8rem 2.4rem;
-            border-radius: 1rem;
-            font-weight: 600;
-            font-size: 1.4rem;
-            transition: 0.3s;
-            cursor: pointer;
-            text-decoration: none;
-            text-align: center;
-        }
-
-        .btn {
-            background: var(--main-color);
-            color: var(--bg-color);
-        }
-
+        /* Back Button Styling */
         .back-btn {
-            color: var(--highlight-color);
-            border: 2px solid var(--highlight-color);
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 10px var(--main-color);
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 3;
+            padding: 0.5rem 1rem;
+            background-color: var(--main-color);
+            color: var(--bg-color);
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
         }
 
         .back-btn:hover {
-            background: var(--highlight-color);
+            background-color: var(--highlight-color);
             color: var(--text-color);
+        }
+
+        /* Container Styling */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            z-index: 2;
+            position: relative;
+            height: 100%; /* Fill the viewport */
+        }
+
+        /* Box Styling */
+        .box {
+            width: 300px;
+            height: 540px; /* Increased height */
+            background-color: var(--second-bg-color);
+            border-radius: 1rem;
+            text-align: center;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            color: var(--text-color);
+            transition: transform 0.3s;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Space items evenly */
+        }
+
+        .box:hover {
+            transform: scale(1.05);
+            border: 2px solid var(--main-color);
+        }
+
+        .box img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .box h3 {
+            font-size: 1.4rem;
+            color: var(--highlight-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .box p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        .box p.info{
+            text-align: justify;
+        }
+
+        /* Button Styling */
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1rem;
+            background-color: var(--main-color);
+            color: var(--bg-color);
+            font-size: 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-top: auto; /* Aligns button at the bottom */
+        }
+
+        .btn:hover {
+            background-color: var(--highlight-color);
+            color: var(--text-color);
+        }
+        img {
+            max-width: 100%;
+            height: 28rem;
+            border-radius: 1rem;
+            box-shadow: 0 0 10px rgba(255, 123, 0, 0.5);
         }
     </style>
 </head>
 <body>
     <div class="overlay"></div>
 
-    <section class="home" id="home">
-        <div class="home-content">
+    <!-- Back Button at the top left -->
+    <a href="getStarted.html" class="back-btn">Back</a>
 
-            <div class="workout-details">
-                <h2>Leg Day Routine</h2>
-                <p>Strengthen your legs with squats, lunges, and other lower body exercises:</p>
-                <ul id="leg-routine">
-                    <li>Squats - 4 sets of 8-12 reps</li>
-                    <li>Lunges - 3 sets of 10-12 reps per leg</li>
-                    <li>Leg Press - 4 sets of 8-12 reps</li>
-                    <li>Calf Raises - 4 sets of 15-20 reps</li>
-                </ul>
-                <div class="btn-container">
-                    <button class="btn" id="start-leg">Start Leg Day</button>
-                    <a href="getStarted.html" class="back-btn">Back</a>
-                </div>
-            </div>
-
-
-            <div class="workout-image">
-                <img src="legsExercise.jpg" alt="Leg Day Workout">
-            </div>
+    <div class="container">
+        <!-- Beginner Box -->
+        <div class="box">
+            <img src="beginnerLegs.jpg" alt="Beginner Legs">
+            <h3>Beginner</h3>
+            <p class="info">Ideal for those just starting out. Focus on building foundational strength in the legs, glutes, and calves.</p>
+            <p><strong>Routine:</strong><br>
+                🦾 Hamstring Curls 3 sets X 12 reps<br>
+                🦾 Leg Extensions 3 sets X 12 reps<br>
+                🦾 Leg Press 2 sets X 12 reps<br>
+                🦾 Hamstring Back 3 sets X 12 reps<br>
+                🦾 Calves 4 sets X 10 reps
+            </p>
+            <a href="https://www.youtube.com/shorts/uJa5yD0jAyE" class="btn" target="_blank">Watch Beginner<br>Leg Day</a>
         </div>
-    </section>
 
-    <script>
-        document.getElementById('start-leg').addEventListener('click', function() {
-            alert('Starting Leg Day! Time to build those legs.');
-        });
-    </script>
-    
+        <!-- Intermediate Box -->
+        <div class="box">
+            <img src="iLeg.jpg" alt="Intermediate Leg">
+            <h3>Intermediate</h3>
+            <p class="info">For those with some experience. Push yourself to the next level with these intermediate routines.</p>
+            <p><strong>Routine:</strong><br>
+                🦾 Hack Squats 3 sets X 10 reps<br>
+                🦾 Leg Press 4 sets X 12 reps<br>
+                🦾 Leg Extensions 4 sets X 12 reps<br>
+                🦾 Hamstring Curls 4 sets X 15 reps<br>
+                🦾 Calves Raises 3 sets X 12 reps
+            </p>
+            <a href="https://www.youtube.com/shorts/LI4O_tyEDbI" class="btn" target="_blank">Watch Intermediate<br>Leg Day</a>
+        </div>
+
+        <!-- Professional Box -->
+        <div class="box">
+            <img src="proLeg.jpg" alt="Professional Leg">
+            <h3>Professional</h3>
+            <p class="info">Advanced exercises for those who want a professional-level challenge. Perfect for seasoned lifters.</p>
+            <p><strong>Routine:</strong><br>
+                🦾 Hack Squats 4 sets X 12 reps<br>
+                🦾 Smith Squats 4 sets X 12 reps<br>
+                🦾 Leg Extensions 4 sets X 12 reps<br>
+                🦾 Single Leg Press 3 set X 12 reps<br>
+                🦾 Leg Curls 3 sets X 12 reps<br>
+                🦾 Calves Raises 3 sets X 12 reps
+            </p>
+            <a href="https://www.youtube.com/shorts/Zp6IWqDZ0Es" class="btn" target="_blank">Watch Professional<br>Leg Day</a>
+        </div>
+    </div>
 </body>
 </html>

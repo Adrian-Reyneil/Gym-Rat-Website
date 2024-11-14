@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000;
 const mongoUri = process.env.MONGODB_URI;
 sgMail.setApiKey(process.env.SENDGRID_API_KEY); // Set SendGrid API key
 
-// Trust the proxy (if you're behind a load balancer or proxy)
+
 app.set('trust proxy', 1);
 
 // Session management with MongoDB store
@@ -58,7 +58,7 @@ function hashPassword(password) {
 }
 
 function isValidPassword(password) {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`!])[A-Za-z\d@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`!]{8,}$/;
     return passwordRegex.test(password);
 }
 
@@ -73,7 +73,8 @@ const loginLimiter = rateLimit({
 });
 
 // MongoDB connection
-mongoose.connect(mongoUri).then(() => {
+mongoose.connect(mongoUri).
+then(() => {
     console.log('Connected to MongoDB');
 }).catch((error) => {
     console.error('MongoDB connection error:', error);
@@ -83,9 +84,13 @@ mongoose.connect(mongoUri).then(() => {
 const userSchema = new mongoose.Schema({
     email: { type: String, required: true },
     password: { type: String, required: true },
+    lastname: { type: String, required: true },
+    firstname: { type: String, required: true },
+    middleInitial:{ type: String, required: true },
     resetKey: String,
     resetExpires: Date,
     createdAt: { type: Date, default: Date.now },
+    lastLoginTime: Date,
 }, { collection: 'users' });
 
 const User = mongoose.model('User', userSchema);
@@ -98,7 +103,6 @@ const tokenSchema = new mongoose.Schema({
 
 const Token = mongoose.model('Token', tokenSchema);
 
-// Generate random string for tokens
 function generateRandomString(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -108,13 +112,9 @@ function generateRandomString(length) {
     }
     return result;
 }
-
-// Generate 6-digit reset code
 function generateCode() {
     return Math.floor(100000 + Math.random() * 900000).toString();
 }
-
-// Send Reset Code Email using SendGrid
 async function sendResetCodeEmail(email, resetCode) {
     const msg = {
         from: 'edorianpuru@gmail.com',  // Ensure this is verified in SendGrid
@@ -132,8 +132,6 @@ async function sendResetCodeEmail(email, resetCode) {
         throw new Error('Error sending reset code email');
     }
 }
-
-
 app.post('/forgot-password', async (req, res) => {
     const { email } = req.body;
 
@@ -172,6 +170,10 @@ app.post('/forgot-password', async (req, res) => {
 app.post('/send-password-reset', async (req, res) => {
     const { email } = req.body;
 
+    if (!email) {
+        return res.status(400).send('Email is required');
+    }
+
     try {
         // Find user by email
         const user = await User.findOne({ email: email }); // Changed 'emaildb' to 'email'
@@ -201,6 +203,19 @@ app.post('/send-password-reset', async (req, res) => {
 // Reset Password Endpoint
 app.post('/reset-password', async (req, res) => {
     const { resetKey, newPassword } = req.body;
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ success: false, message: 'Full name, email, and password are required.' });
+    }
+
+    if (!validator.isEmail(email)) {
+        return res.status(400).json({ success: false, message: 'Invalid email format.' });
+    }
+
+    if (!isValidPassword(password)) {
+        return res.status(400).json({ success: false, message: 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.' });
+    }
 
     try {
         // Find user by resetKey and check if it hasn't expired
@@ -226,15 +241,20 @@ app.post('/reset-password', async (req, res) => {
     }
 });
 // Sign Up Route
-// Sign Up Route
 app.post('/signup', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, firstname, lastname, middleInitial } = req.body;
 
     // Basic validation
-    if (!email || !password) {
-        return res.status(400).json({ success: false, message: 'Email and password are required.' });
+    if (!email || !password || !firstname || !lastname || !middleInitial) {
+        return res.status(400).json({ success: false, message: 'Email, password, firstname, lastname, and middle initial are required.' });
+    }
+    if (!validator.isEmail(email)) {
+        return res.status(400).json({ success: false, message: 'Invalid email format.' });
     }
 
+    if (!isValidPassword(password)) {
+        return res.status(400).json({ success: false, message: 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.' });
+    }
     try {
         // Check if user already exists
         const existingUser = await User.findOne({ email });
@@ -245,10 +265,12 @@ app.post('/signup', async (req, res) => {
         // Hash the password
         const hashedPassword = hashPassword(password);
 
-        // Create and save the new user
         const newUser = new User({
             email,
             password: hashedPassword,
+            lastname,
+            firstname,
+            middleInitial,
             // The createdAt field will be automatically set by the schema
         });
 
@@ -264,6 +286,11 @@ app.post('/signup', async (req, res) => {
 });
 app.post('/login', loginLimiter, async (req, res) => {
     const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ success: false, message: 'Email, and password are required.' });
+    }
+
 
     try {
       // Input validation

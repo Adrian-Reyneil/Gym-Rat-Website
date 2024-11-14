@@ -49,7 +49,8 @@ body {
     text-align: center;
     border-bottom: 2px solid #ff7b00; /* Orange underline */
     padding-bottom: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+    margin-top: 0px;
 }
 
 .Sign-upform-container input[type="checkbox"] {
@@ -59,12 +60,12 @@ body {
 .Sign-upform-container input[type="email"],
 .Sign-upform-container input[type="password"],
 .Sign-upform-container input[type="text"] {
-    width: 92%;
-    padding: 12px;
-    margin-bottom: 15px;
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 10px;
     border: none;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 12px;
     background-color: #f0f0f0;
 }
 
@@ -137,4 +138,19 @@ button:hover {
 
 .footer a:hover {
     text-decoration: underline;
+}
+
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+
+#togglePassword {
+    position: absolute;
+    right: 10px; /* Position the icon to the right */
+    top: 40%; /* Vertically center the icon */
+    transform: translateY(-50%); /* Correct the exact centering */
+    cursor: pointer;
+    font-size: 18px; /* Adjust the icon size if needed */
 }
