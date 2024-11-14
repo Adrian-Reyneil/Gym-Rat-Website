@@ -69,6 +69,68 @@ body {
     background-color: #f0f0f0;
 }
 
+.forgot-form-container {
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.forgot-form-container h4 {
+    font-size: 24px;
+    text-align: center;
+    border-bottom: 2px solid #ff7b00; /* Orange underline */
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+.forgot-form-container input[type="email"] {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 12px;
+    background-color: #f0f0f0;
+}
+.forgot-form-container{
+    background-color: rgba(50, 50, 50, 0.85);
+    padding: 20px 30px;
+    border-radius: 10px;
+    color: white;
+    max-width: 400px;
+    width: 100%;
+}
+.forgot-form-container button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #ff7b00;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.forgot-form-container button + button {
+    margin-top: 10px; /* Adds a gap between the buttons */
+}
+
+.forgot-form-container button.back-button a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.forgot-form-container button.back-button {
+    background-color: #ff7b00;
+}
+
 /* Form container styling */
 .form-container {
     padding: 20px 30px;
@@ -138,19 +200,4 @@ button:hover {
 
 .footer a:hover {
     text-decoration: underline;
-}
-
-.password-container {
-    position: relative;
-    width: 100%;
-}
-
-
-#togglePassword {
-    position: absolute;
-    right: 10px; /* Position the icon to the right */
-    top: 40%; /* Vertically center the icon */
-    transform: translateY(-50%); /* Correct the exact centering */
-    cursor: pointer;
-    font-size: 18px; /* Adjust the icon size if needed */
 }
